@@ -12,7 +12,24 @@ services:
       - POSTGRES_PASSWORD=postgres123
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend-net
+
+  app:
+    image: alpine
+    container_name: app
+    command: ["sh", "-c", "sleep 9999"]
+    environment:
+      - DATABASE_HOST=db
+    depends_on:
+      - db
+    networks:
+      - backend-net
 
 
 volumes:
   postgres_data:
+
+networks:
+  backend-net:
+    driver: bridge
